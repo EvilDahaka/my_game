@@ -1,4 +1,3 @@
-
 class Hero:
     def __init__(self, pos, land):
         self.mode = True
@@ -29,16 +28,38 @@ class Hero:
 
     def accept_events(self):
         base.accept('c', self.changeView)
-        base.accept('a',self.turn_left)
-        base.accept('a'+'-repeat',self.turn_left)
-        base.accept('d', self.turn_right)
-        base.accept('d'+'-repeat', self.turn_right)
+        base.accept('n',self.turn_left)
+        base.accept('n'+'-repeat',self.turn_left)
+        base.accept('m', self.turn_right)
+        base.accept('m'+'-repeat', self.turn_right)
+
+        base.accept('s', self.back)
+        base.accept('s' + '-repeat', self.back)
+        base.accept('w', self.forward)
+        base.accept('w'+'-repeat', self.forward)
+
+        base.accept('d', self.right)
+        base.accept('d'+'-repeat',self.right)
+        base.accept('a', self.left)
+        base.accept('a'+'-repeat',self.left)
+
 
     def turn_left(self):
         self.hero.setH((self.hero.getH() + 5) % 360)
     def turn_right(self):
         self.hero.setH((self.hero.getH() - 5) % 360)
-
+    def back(self):
+        angle =(self.hero.getH()+180) % 360
+        self.move_to(angle)
+    def forward(self):
+        angle =(self.hero.getH()) % 360
+        self.hero.move_to(angle)
+    def right(self):
+        angle =(self.hero.getH()+270) % 360
+        self.hero.move_to(angle)
+    def left(self):
+        angle =(self.hero.getH()+90) % 360
+        self.hero.move_to(angle)
 
 
     def changeView(self):
@@ -47,19 +68,24 @@ class Hero:
         else:
             self.cameraBind()
 
-
        
     def just_move(self, angle):
-        pass
+        pos = self.look_at(angle)
+        self.hero.setPos(pos)
     def try_move(self, angle):
         pass
     def move_to(self, angle):
         pass
 
 
-
     def look_at(self, angle):
-        pass
+        from_x = round(self.hero.getX())
+        from_y = round(self.hero.getY())
+        from_z = round(self.hero.getZ())
+
+        dx, dy = self.hero.check_dir(self, angle)
+
+        return from_x + dx, from_y + dy, from_z
     def check_dir(self, angle):
         pass
 
