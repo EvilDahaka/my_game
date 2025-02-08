@@ -43,6 +43,13 @@ class Hero:
         base.accept('a', self.left)
         base.accept('a'+'-repeat',self.left)
 
+        base.accept('e',self.up)
+        base.accept('e'+'repeat',self.up)
+        base.accept('z',self.changeMode)
+
+        base.accept('b',self.build)
+        base.accept('z',self.destroy)
+
 
     def turn_left(self):
         self.hero.setH((self.hero.getH() + 5) % 360)
@@ -60,6 +67,16 @@ class Hero:
     def left(self):
         angle =(self.hero.getH()+90) % 360
         self.hero.move_to(angle)
+    
+    def up(self):
+        self.hero.setZ(self.hero.getZ() + 1)
+    def changeMode(self):
+        if self.mode == True:
+            self.mode == False
+        else:
+            self.mode == True
+
+
 
 
     def changeView(self):
@@ -73,9 +90,20 @@ class Hero:
         pos = self.look_at(angle)
         self.hero.setPos(pos)
     def try_move(self, angle):
-        pass
+        pos = self.look_at(angle)
+        if self.land.isEmpty(pos):
+            pos = self.land.findHighestEmpty(pos)
+            self.hero.setPos(pos)
+        else:
+            pos = pos[0], pos[1], pos[2] + 1
+            if self.land.isEmpty(pos):
+                self.hero.setPos(pos)
     def move_to(self, angle):
-        pass
+        if self.mode:
+            self.just_move(angle)
+        else:
+            self.try_move(angle)
+
 
 
     def look_at(self, angle):
@@ -87,8 +115,37 @@ class Hero:
 
         return from_x + dx, from_y + dy, from_z
     def check_dir(self, angle):
-        pass
-
-
+        if angle >= 0 and angle <= 20:
+            return 0,1
+        elif angle <= 65:
+            return 1,-1
+        elif angle <=110:
+            return 1,0
+        elif angle <= 155:
+            return 1,1
+        elif angle <= 200:
+            return 0,1
+        elif angle <= 245:
+            return -1,1
+        elif angle <= 290:
+            return -1,0
+        elif angle <=335:
+            return -1,-1
+        else:
+            return 0,1
+    def build(self):
+        angle = self.hero.getH() % 360
+        pos = self.look_at(angle)
+        if self.mode:
+            self.land.addBlock(pos)
+        else:
+            self.land.buildBlock(pos)
+    def destroy(self):
+        angle = self.hero.getH() % 360
+        pos = self.look_at(angle)
+        if self.mode:
+            self.land.delBlock(pos)
+        else:
+            self.land.delBlockFrom(pos)
 
     
