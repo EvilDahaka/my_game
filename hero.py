@@ -53,6 +53,10 @@ class Hero:
         base.accept('g', self.down)
         base.accept('g' + '-repeat', self.down)
 
+        base.accept('k', self.land.saveMap)
+        base.accept('l',self.land.loadMap)
+
+
 
     def turn_left(self):
         self.hero.setH((self.hero.getH() + 5) % 360)
@@ -62,14 +66,14 @@ class Hero:
         angle =(self.hero.getH()+180) % 360
         self.move_to(angle)
     def forward(self):
-        angle =(self.hero.getH()) % 360
-        self.hero.move_to(angle)
+        angle =(self.hero.getH())  % 360
+        self.move_to(angle)
     def right(self):
         angle =(self.hero.getH()+270) % 360
-        self.hero.move_to(angle)
+        self.move_to(angle)
     def left(self):
         angle =(self.hero.getH()+90) % 360
-        self.hero.move_to(angle)
+        self.move_to(angle)
     
     def up(self):
         self.hero.setZ(self.hero.getZ() + 1)
@@ -78,7 +82,7 @@ class Hero:
             self.mode == False
         else:
             self.mode == True
-     def down(self):
+    def down(self):
         if self.mode and self.hero.getZ() > 1:
             self.hero.setZ(self.hero.getZ() - 1)
 
@@ -117,7 +121,7 @@ class Hero:
         from_y = round(self.hero.getY())
         from_z = round(self.hero.getZ())
 
-        dx, dy = self.hero.check_dir(self, angle)
+        dx, dy = self.check_dir(angle)
 
         return from_x + dx, from_y + dy, from_z
     def check_dir(self, angle):
