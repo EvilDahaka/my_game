@@ -1,4 +1,5 @@
 from direct.showbase.ShowBase import ShowBase
+import pickle
 
 class Mapmanager():
     def __init__(self, base):
@@ -86,4 +87,22 @@ class Mapmanager():
         for block in self.findBlocks(pos):
             block.removeNode()
   
+    def saveMap(self):
+        blocks = self.land.getChildren()
+        with open('my_map.dat','wb') as fout:
+            pickle.dump(len(blocks), fout)
+            for block in blocks:
+                x, y, z = block.getPos()
+                pos = (int(x), int(y), int(z))
+                pickle.dump(pos, fout)
+                
+    def loadMap(self):
+        self.clear()
+        with open('my_map.dat' ,'rb') as fin:
+            lenght = pickle.load(fin)
+            for i in range(lenght):
+                pos = pickle.load(fin)
+                self.addBlock(pos)
+
+
     
