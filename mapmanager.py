@@ -19,7 +19,7 @@ class Mapmanager():
         self.block.reparentTo(self.land)
         self.color = self.getColor(position[2])
         self.block.setColor(self.color)
-        self.block.setTag('at', str(pos))
+        self.block.setTag('at', str(position))
        # Додаємо блок до "землі"
 
     def startNew(self):
