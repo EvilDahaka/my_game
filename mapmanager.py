@@ -11,7 +11,7 @@ class Mapmanager():
                        (0.5, 0.5, 0.2, 1),
                        (0.0, 0.6, 0.0, 1),]
 
-    def addBlock(self, pos):
+    def addBlock(self, position):
         # Завантаження моделі та текстури
         self.block = self.base.loader.loadModel(self.model)  # Використовуємо self.base.loader
         self.block.setTexture(self.base.loader.loadTexture(self.texture))
