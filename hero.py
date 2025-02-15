@@ -50,6 +50,9 @@ class Hero:
         base.accept('b',self.build)
         base.accept('z',self.destroy)
 
+        base.accept('g', self.down)
+        base.accept('g' + '-repeat', self.down)
+
 
     def turn_left(self):
         self.hero.setH((self.hero.getH() + 5) % 360)
@@ -75,6 +78,9 @@ class Hero:
             self.mode == False
         else:
             self.mode == True
+     def down(self):
+        if self.mode and self.hero.getZ() > 1:
+            self.hero.setZ(self.hero.getZ() - 1)
 
 
 
