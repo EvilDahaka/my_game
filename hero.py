@@ -2,8 +2,10 @@ class Hero:
     def __init__(self, pos, land):
         self.mode = True
         self.land = land
-        self.hero = loader.loadModel("characterlowpoly2.obj")
+        self.hero = loader.loadModel("Minion.obj")
+        self.texture = 'mc_005_df.png'
         self.hero.setColor(1, 0.5, 0)
+        self.hero.setTexture(loader.loadTexture(self.texture))
         self.hero.setScale(0.3)
         self.hero.setPos(pos)
         #self.hero.setHpr(0, 90, 0)  # Або спробуй (0, 270, 0)
