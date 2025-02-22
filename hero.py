@@ -6,6 +6,7 @@ class Hero:
         self.hero.setColor(1, 0.5, 0)
         self.hero.setScale(0.3)
         self.hero.setPos(pos)
+        #self.hero.setHpr(0, 90, 0)  # Або спробуй (0, 270, 0)
         self.hero.reparentTo(render)
         self.cameraBind()
         self.accept_events()
@@ -126,7 +127,7 @@ class Hero:
         return from_x + dx, from_y + dy, from_z
     def check_dir(self, angle):
         if angle >= 0 and angle <= 20:
-            return 0,1
+            return 0,-1
         elif angle <= 65:
             return 1,-1
         elif angle <=110:
@@ -142,7 +143,7 @@ class Hero:
         elif angle <=335:
             return -1,-1
         else:
-            return 0,1
+            return 0,-1
     def build(self):
         angle = self.hero.getH() % 360
         pos = self.look_at(angle)
