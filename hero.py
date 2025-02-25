@@ -1,12 +1,13 @@
 class Hero:
-    def __init__(self, pos, land):
+    def __init__(self, pos, land, game):
         self.mode = True
         self.land = land
-        self.hero = loader.loadModel("Minion.obj")
-        self.texture = 'mc_005_df.png'
+        self.game = game 
+        self.hero = loader.loadModel("characterlowpoly2.obj")
+        #self.texture = 'rp_nathan_animated_003_walking_A.jpg'
         self.hero.setColor(1, 0.5, 0)
-        self.hero.setTexture(loader.loadTexture(self.texture))
-        self.hero.setScale(0.3)
+        #self.hero.setTexture(loader.loadTexture(self.texture))
+        self.hero.setScale(0.1)
         self.hero.setPos(pos)
         #self.hero.setHpr(0, 90, 0)  # Або спробуй (0, 270, 0)
         self.hero.reparentTo(render)
@@ -48,7 +49,7 @@ class Hero:
 
         base.accept('e',self.up)
         base.accept('e'+'repeat',self.up)
-        base.accept('z',self.changeMode)
+        base.accept('q',self.changeMode)
 
         base.accept('b',self.build)
         base.accept('z',self.destroy)
@@ -62,30 +63,53 @@ class Hero:
 
 
     def turn_left(self):
+        if not self.game.game_started or self.game.paused:
+            return
         self.hero.setH((self.hero.getH() + 5) % 360)
+    
     def turn_right(self):
+        if not self.game.game_started or self.game.paused:
+            return
         self.hero.setH((self.hero.getH() - 5) % 360)
+    
     def back(self):
+        if not self.game.game_started or self.game.paused:
+            return
         angle =(self.hero.getH()+180) % 360
         self.move_to(angle)
+    
     def forward(self):
-        angle =(self.hero.getH())  % 360
+        if not self.game.game_started or self.game.paused:
+            return
+        angle = (self.hero.getH()) % 360
         self.move_to(angle)
+    
     def right(self):
+        if not self.game.game_started or self.game.paused:
+            return
         angle =(self.hero.getH()+270) % 360
         self.move_to(angle)
+    
     def left(self):
+        if not self.game.game_started or self.game.paused:
+            return
         angle =(self.hero.getH()+90) % 360
         self.move_to(angle)
     
     def up(self):
+        if not self.game.game_started or self.game.paused:
+            return
         self.hero.setZ(self.hero.getZ() + 1)
+    
     def changeMode(self):
         if self.mode == True:
             self.mode == False
         else:
             self.mode == True
+    
     def down(self):
+        if not self.game.game_started or self.game.paused:
+            return
         if self.mode and self.hero.getZ() > 1:
             self.hero.setZ(self.hero.getZ() - 1)
 
@@ -93,6 +117,8 @@ class Hero:
 
 
     def changeView(self):
+        if not self.game.game_started or self.game.paused:
+            return
         if self.cameraOn:
             self.cameraUp()
         else:
@@ -105,10 +131,10 @@ class Hero:
     def try_move(self, angle):
         pos = self.look_at(angle)
         if self.land.isEmpty(pos):
-            pos = self.land.findHighestEmpty(pos)
+            pos = self.land.findHigherEmpty(pos)
             self.hero.setPos(pos)
         else:
-            pos = pos[0], pos[1], pos[2] + 1
+            pos = pos[0],pos[1],pos[2] +1
             if self.land.isEmpty(pos):
                 self.hero.setPos(pos)
     def move_to(self, angle):
@@ -146,14 +172,20 @@ class Hero:
             return -1,-1
         else:
             return 0,-1
+        
     def build(self):
+        if not self.game.game_started or self.game.paused:
+            return
         angle = self.hero.getH() % 360
         pos = self.look_at(angle)
         if self.mode:
             self.land.addBlock(pos)
         else:
             self.land.buildBlock(pos)
+    
     def destroy(self):
+        if not self.game.game_started or self.game.paused:
+            return
         angle = self.hero.getH() % 360
         pos = self.look_at(angle)
         if self.mode:
