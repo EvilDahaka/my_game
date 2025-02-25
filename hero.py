@@ -1,3 +1,6 @@
+from direct.task import Task
+from direct.task.TaskManagerGlobal import taskMgr
+
 class Hero:
     def __init__(self, pos, land, game):
         self.mode = True
@@ -59,6 +62,9 @@ class Hero:
 
         base.accept('k', self.land.saveMap)
         base.accept('l',self.land.loadMap)
+
+        base.accept('space', self.jump)
+        base.accept('t', self.teleport)
 
 
 
@@ -192,5 +198,26 @@ class Hero:
             self.land.delBlock(pos)
         else:
             self.land.delBlockFrom(pos)
+
+    def jump(self):
+        if not self.game.game_started or self.game.paused:
+            return
+        self.hero.setZ(self.hero.getZ() + 2)  # Піднімає героя
+        taskMgr.doMethodLater(0.3, lambda task: self.land(task), 'fall')   # Викликає посадку через 0.3 сек.
+
+    def land(self, task):  # land ОБОВ'ЯЗКОВО має приймати параметр task
+        self.hero.setZ(self.hero.getZ() - 2)  # Опускає героя назад
+        return task.done  # Завершення задачі
+    
+    def teleport(self):
+        if not self.game.game_started or self.game.paused:
+            return
+        self.hero.setPos(10, 8, 2)  # Телепорт на стартову точку
+   
+
+
+
+
+
 
     
