@@ -6,7 +6,7 @@ class Mapmanager():
     def __init__(self, base):
         self.base = base
         self.model = 'block (1).egg'  # Модель кубика
-        self.texture = 'brass.png'  # Текстура кубика
+        self.texture = 'block (2).png'  # Текстура кубика
         self.land = self.base.render.attachNewNode("Land")  # Створення вузла для "землі"
         self.colors = [(0.5, 0.3, 0.0, 1),
                        (0.2, 0.2, 0.3, 1),
