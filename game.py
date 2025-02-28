@@ -3,6 +3,8 @@ from direct.showbase.ShowBase import ShowBase
 from mapmanager import Mapmanager
 from hero import Hero
 from menu import Menu
+from object import Tree 
+
 import sys 
 
 class Game(ShowBase):
@@ -12,7 +14,10 @@ class Game(ShowBase):
         self.camLens.setFov(90)  # Встановлюємо поле огляду камери
         self.land.addBlock((0, 0, 0))
         self.land.loadLand("land.txt")
-        self.hero = Hero((10, 8, 2), self.land, self)
+        self.hero = Hero((10, 8, 2), self.land,self)
+        #self.tree1 = Tree((5, 5, 2))
+        #self.tree2 = Tree((10, 10, 2))
+
 
         self.game_started = False
         self.paused = False

@@ -1,26 +1,37 @@
 from direct.showbase.ShowBase import ShowBase
 import pickle
 
+
 class Mapmanager():
     def __init__(self, base):
         self.base = base
         self.model = 'block (1).egg'  # Модель кубика
-        self.texture = 'block (2).png'  # Текстура кубика
+        self.texture = 'brass.png'  # Текстура кубика
         self.land = self.base.render.attachNewNode("Land")  # Створення вузла для "землі"
         self.colors = [(0.5, 0.3, 0.0, 1),
                        (0.2, 0.2, 0.3, 1),
                        (0.5, 0.5, 0.2, 1),
                        (0.0, 0.6, 0.0, 1),]
+      
 
-    def addBlock(self, position):
-        # Завантаження моделі та текстури
-        self.block = self.base.loader.loadModel(self.model)  # Використовуємо self.base.loader
-        self.block.setTexture(self.base.loader.loadTexture(self.texture))
-        self.block.setPos(position)
-        self.block.reparentTo(self.land)
-        self.color = self.getColor(position[2])
-        self.block.setColor(self.color)
-        self.block.setTag('at', str(position))
+    def addBlock(self, position, block_type=None):
+        block = self.base.loader.loadModel(self.model)  
+
+    
+        textures = {
+            "brick": "brick_.png",
+            "stone": "Stone_wall_1.png",
+            None: self.texture  # Базова текстура
+        }
+    
+        texture_path = textures.get(block_type, self.texture)
+        block.setTexture(self.base.loader.loadTexture(texture_path), 1)
+        block.setPos(position)
+        block.reparentTo(self.land)
+        block.setColor(self.getColor(position[2]))
+        block.setTag('at', str(position))
+        return block
+
        # Додаємо блок до "землі"
 
     def startNew(self):
@@ -75,11 +86,15 @@ class Mapmanager():
         blocks = self.findBlocks(position)
         for block in blocks:
             block.removeNode()
-    def buildBlock(self,pos):
-        x, y, z = pos
-        new = self.findHighestEmpty(pos)
+
+    def buildBlock(self, position, block_type=None):
+        x, y, z = position
+        new = self.findHighestEmpty(position)
         if new[2] <= z + 1:
-            self.addBlocks(new)
+            self.addBlock(new, block_type)
+
+
+ 
 
     def delBlockFrom(self,position):
         x,y,z = self.findHigherEmpty(position)

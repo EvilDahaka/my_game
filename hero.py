@@ -1,21 +1,42 @@
-from direct.task import Task
-from direct.task.TaskManagerGlobal import taskMgr
 
 class Hero:
     def __init__(self, pos, land, game):
         self.mode = True
         self.land = land
         self.game = game 
-        self.hero = loader.loadModel("characterlowpoly2.obj")
+        self.hero = loader.loadModel("simpleEnemy.egg")
+        #self.hero.setHpr(0, 0, 0)  
+
         #self.texture = 'rp_nathan_animated_003_walking_A.jpg'
         self.hero.setColor(1, 0.5, 0)
-        #self.hero.setTexture(loader.loadTexture(self.texture))
-        self.hero.setScale(0.1)
+        self.hero.setTexture(loader.loadTexture('simpleEnemy.png'))
+        self.hero.setScale(0.4)
         self.hero.setPos(pos)
         #self.hero.setHpr(0, 90, 0)  # Або спробуй (0, 270, 0)
         self.hero.reparentTo(render)
+        self.hero.setP(0)  # Вирівнює нахил вперед-назад
+        self.hero.setR(0)  # Вирівнює бічний нахил
+
+        
         self.cameraBind()
         self.accept_events()
+        '''
+        self.cTrav = CollisionTraverser()
+        self.gravity_handler = CollisionHandlerGravity()
+        self.gravity_handler.setGravity(9.8)  # Сила гравітації
+
+        collision_node = CollisionNode("hero")
+        collision_node.addSolid(CollisionSphere(0, 0, 1, 1))  # Колізійна сфера
+        collision_np = self.hero.attachNewNode(collision_node)
+        collision_np.show()  # Показуємо колізію для тестування
+
+        self.cTrav.addCollider(collision_np, self.gravity_handler)
+        self.gravity_handler.addCollider(collision_np, self.hero)
+        self.gravity_handler.setOffset(0.5)  # Запобігає просіданню в блоки
+        self.gravity_handler.setMaxVelocity(10)  # За
+        taskMgr.add(self.applyGravity, "applyGravityTask")
+        '''
+
 
     def cameraBind(self):
         base.disableMouse()
@@ -55,6 +76,8 @@ class Hero:
         base.accept('q',self.changeMode)
 
         base.accept('b',self.build)
+        base.accept('v', self.build_brick)  #
+        base.accept('x', self.build_stone) 
         base.accept('z',self.destroy)
 
         base.accept('g', self.down)
@@ -63,7 +86,7 @@ class Hero:
         base.accept('k', self.land.saveMap)
         base.accept('l',self.land.loadMap)
 
-        base.accept('space', self.jump)
+        #base.accept('space', self.jump)
         base.accept('t', self.teleport)
 
 
@@ -188,6 +211,28 @@ class Hero:
             self.land.addBlock(pos)
         else:
             self.land.buildBlock(pos)
+            
+    def build_brick(self):
+        if not self.game.game_started or self.game.paused:
+            return
+        angle = self.hero.getH() % 360
+        pos = self.look_at(angle)
+        if self.mode:
+            self.land.addBlock(pos, "brick")  # Передаємо тип блоку
+        else:
+            self.land.buildBlock(pos, "brick")
+
+
+    def build_stone(self):
+        if not self.game.game_started or self.game.paused:
+            return
+        angle = self.hero.getH() % 360
+        pos = self.look_at(angle)
+        if self.mode:
+            self.land.addBlock(pos, "stone")  # Передаємо тип блоку
+        else:
+            self.land.buildBlock(pos, "stone")
+
     
     def destroy(self):
         if not self.game.game_started or self.game.paused:
@@ -198,21 +243,35 @@ class Hero:
             self.land.delBlock(pos)
         else:
             self.land.delBlockFrom(pos)
-
+    '''
     def jump(self):
         if not self.game.game_started or self.game.paused:
             return
-        self.hero.setZ(self.hero.getZ() + 2)  # Піднімає героя
-        taskMgr.doMethodLater(0.3, lambda task: self.land(task), 'fall')   # Викликає посадку через 0.3 сек.
+        self.hero.setZ(self.hero.getZ() + 2)
+        taskMgr.doMethodLater(0.3, self.applyGravity, "applyGravityAfterJump")
+        taskMgr.doMethodLater(0.3, lambda task: self.hero.setZ(self.land.findHighestEmpty(self.hero.getPos())[2]), 'fall')
 
-    def land(self, task):  # land ОБОВ'ЯЗКОВО має приймати параметр task
-        self.hero.setZ(self.hero.getZ() - 2)  # Опускає героя назад
-        return task.done  # Завершення задачі
+   # Викликає посадку через 0.3 сек.
+
+    def land_hero(self, task):
+        self.land.land()  # Викликаємо посадку
+        return task.done
+    '''
+
     
     def teleport(self):
         if not self.game.game_started or self.game.paused:
             return
-        self.hero.setPos(10, 8, 2)  # Телепорт на стартову точку
+        self.hero.setPos(10, 8, 2)  
+    '''
+    def applyGravity(self, task):
+        self.cTrav.traverse(render)
+        if not self.gravity_handler.isOnGround():
+            self.hero.setZ(self.hero.getZ() - 0.1)  # Симуляція падіння
+        return task.cont
+    '''
+
+
    
 
 
