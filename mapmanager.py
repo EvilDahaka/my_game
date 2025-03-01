@@ -6,18 +6,22 @@ class Mapmanager():
     def __init__(self, base):
         self.base = base
         self.model = 'block (1).egg'  # Модель кубика
-        self.texture = 'brass.png'  # Текстура кубика
+        self.texture = 'block (2).png'  # Текстура кубика
         self.land = self.base.render.attachNewNode("Land")  # Створення вузла для "землі"
         self.colors = [(0.5, 0.3, 0.0, 1),
                        (0.2, 0.2, 0.3, 1),
                        (0.5, 0.5, 0.2, 1),
                        (0.0, 0.6, 0.0, 1),]
+        #self.textures = {
+            #0: 'grass_c.png',   # Низький рівень (трава)
+            #1: 'grass_c.png',      # Земля
+            #2: 'Stone_wall_1.png',     # Камінь
+            #3: 'Stone_wall_1.png',    # Цегла
+        #}
       
 
     def addBlock(self, position, block_type=None):
-        block = self.base.loader.loadModel(self.model)  
-
-    
+        block = self.base.loader.loadModel(self.model)
         textures = {
             "brick": "brick_.png",
             "stone": "Stone_wall_1.png",
@@ -32,8 +36,17 @@ class Mapmanager():
         block.setTag('at', str(position))
         return block
 
-       # Додаємо блок до "землі"
-
+    # Якщо block_type не заданий, вибираємо текстуру за висотою
+        '''if block_type is None:
+            height_level = min(position[2], max(self.textures.keys()))  # Запобігаємо виходу за межі списку
+            texture_path = self.textures.get(height_level, self.texture)
+        else:
+            textures = {
+                "brick": "brick_.png",
+                "stone": "Stone_wall_1.png",
+            }
+            texture_path = textures.get(block_type, self.texture)  # Якщо тип блоку не знайдено, використовуємо стандартну текстуру
+        '''
     def startNew(self):
         # Скидання або оновлення "землі"
         self.land.removeNode()
