@@ -80,9 +80,13 @@ class Mapmanager():
     def isEmpty(self,pos):
         blocks = self.findBlocks(pos)
         if blocks:
+            print('блок зайнятий')
             return False
+        
         else:
+            print('блок пустий ')
             return True
+           
         
     
         
