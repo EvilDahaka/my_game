@@ -1,7 +1,7 @@
 
 class Hero:
     def __init__(self, pos, land, game):
-        self.mode = True
+        self.mode = False
         self.land = land
         self.game = game 
         self.hero = loader.loadModel("simpleEnemy.egg")
@@ -73,7 +73,7 @@ class Hero:
 
         base.accept('e',self.up)
         base.accept('e'+'repeat',self.up)
-        base.accept('q',self.changeMode)
+        base.accept('u',self.changeMode)
 
         base.accept('b',self.build)
         base.accept('v', self.build_brick)  #
@@ -152,6 +152,10 @@ class Hero:
             self.cameraUp()
         else:
             self.cameraBind()
+        if self.mode:
+            self.mode = False
+        else:
+            self.mode = True
 
        
     def just_move(self, angle):
@@ -160,7 +164,7 @@ class Hero:
     def try_move(self, angle):
         pos = self.look_at(angle)
         if self.land.isEmpty(pos):
-            pos = self.land.findHigherEmpty(pos)
+            pos = self.land.findHighestEmpty(pos)
             self.hero.setPos(pos)
         else:
             pos = pos[0],pos[1],pos[2] +1
@@ -168,8 +172,10 @@ class Hero:
                 self.hero.setPos(pos)
     def move_to(self, angle):
         if self.mode:
+            print('just_move')
             self.just_move(angle)
         else:
+            print('try_move')
             self.try_move(angle)
 
 
