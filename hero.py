@@ -73,15 +73,15 @@ class Hero:
 
         base.accept('e',self.up)
         base.accept('e'+'repeat',self.up)
-        base.accept('u',self.changeMode)
+        base.accept('g',self.changeMode)
 
         base.accept('b',self.build)
         base.accept('v', self.build_brick)  #
         base.accept('x', self.build_stone) 
         base.accept('z',self.destroy)
 
-        base.accept('g', self.down)
-        base.accept('g' + '-repeat', self.down)
+        base.accept('q', self.down)
+        base.accept('q' + '-repeat', self.down)
 
         base.accept('k', self.land.saveMap)
         base.accept('l',self.land.loadMap)
@@ -131,15 +131,17 @@ class Hero:
         self.hero.setZ(self.hero.getZ() + 1)
     
     def changeMode(self):
-        if self.mode == True:
-            self.mode == False
+        if self.mode:
+            self.mode = False
         else:
-            self.mode == True
+            self.mode = True
+
     
     def down(self):
         if not self.game.game_started or self.game.paused:
             return
-        if self.mode and self.hero.getZ() > 1:
+        if self.hero.getZ() > 1:
+        #if self.mode and self.hero.getZ() > 1:
             self.hero.setZ(self.hero.getZ() - 1)
 
 
