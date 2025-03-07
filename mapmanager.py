@@ -32,8 +32,10 @@ class Mapmanager():
         block.setTexture(self.base.loader.loadTexture(texture_path), 1)
         block.setPos(position)
         block.reparentTo(self.land)
-        block.setColor(self.getColor(position[2]))
+        #block.setColor(self.getColor(position[2]))
         block.setTag('at', str(position))
+        if block_type is None:
+            block.setColor(self.getColor(position[2]))
         return block
 
     # Якщо block_type не заданий, вибираємо текстуру за висотою
