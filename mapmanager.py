@@ -116,7 +116,7 @@ class Mapmanager():
  
 
     def delBlockFrom(self,position):
-        x,y,z = self.findHigherEmpty(position)
+        x,y,z = self.findHighestEmpty(position)
         pos = x,y,z-1
         for block in self.findBlocks(pos):
             block.removeNode()
