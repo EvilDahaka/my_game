@@ -32,8 +32,8 @@ class Menu(DirectObject):
                                       pos=(0, 0, 0), relief="raised")
 
        
-        left_text = ("WASD - Move\nE - Place Block\n"
-                     "Q - Remove Block\nT - Teleport\nC - Change View\n"
+        left_text = ("WASD - Move\nE - Up\n"
+                     "Q - Down\nT - Teleport\nC - Change View\n"
                      "N - Turn Left\nM - Turn Right")
         self.left_hint = DirectLabel(parent=self.hint_frame, text=left_text, scale=0.06,
                                      pos=(-0.55, 0, 0.1), text_fg=(1, 1, 1, 1),
@@ -61,7 +61,7 @@ class Menu(DirectObject):
         self.frame.show()
 
     def hide(self):
-        self.frame.hide()\
+        self.frame.hide()
         
     def show_controls(self):
         self.hint_frame.show()
